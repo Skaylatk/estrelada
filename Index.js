@@ -15,10 +15,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-  secret: '10242872872&$47182682-266',
+  secret: '1024551649183260xxx',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
+  cookie: { secure: false }
   
 }))
 
@@ -26,7 +26,7 @@ mongoose.connect('mongodb+srv://alefdesalvador:filhodorei@sukita.kbmrt.mongodb.n
     .then(() => console.log('✅ Conectado ao MongoDB'))
     .catch(err => console.error('Erro ao conectar ao MongoDB', err));
 
-memsagens = [];
+let memsagens = [];
 
 function requireLogin(req, res, next) {
   if (!req.session.user) {
@@ -47,9 +47,14 @@ app.post('/submit', async (req, res) => {
   const { email, senha} = req.body;
   const usuario = await User.findOne({ email, senha})
   if (usuario) {
-    res.send("<h1>Logado com sucesso</h1>")
+    req.session.user = {
+      username: usuario.username,
+      email: usuario.email,
+      senha: usuario.senha
+    }
+    res.redirect('/chat')
   } else {
-    res.redirect("/")
+    res.redirect("/cadastrar")
   
   }
 
@@ -64,10 +69,12 @@ app.post('/subdastro', async (req, res) => {
     senha
   });
   await usuario.save();
+  
 })
 
 app.get('/chat', requireLogin, (req, res) => {
-  res.send("hhjjsjjjsjj")
+  res.sendFile(path.join(__dirname, 'public', 'htmls', 'chat.html'));
+  
 })
 
 app.post('/api/v1', (req, res) => {
@@ -81,7 +88,7 @@ app.post('/api/v1', (req, res) => {
       usuario: botname,
     }
     io.emit('mensagem', response)
-    mensagem.push(response)
+    memsagens.push(response)
   }
 });
 
@@ -92,7 +99,9 @@ app.use((req, res) => {
 io.on('connection', (socket) => {
   console.log('👤 Novo usuario conectado:', socket.id)
   socket.emit('historico', memsagens)
-  socket.on('mensagem', (username, msg) => {
+  socket.on('mensagem', (msg) => {
+
+    const username = socket.request.session.user?.username;
     const novamemsagem = { usuario: username, mensagem: msg}
     memsagens.push(novamemsagem)
     io.emit('mensagem', novamemsagem)
