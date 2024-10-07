@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
    <head>
      <title>Estrelada</title>
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
+     <style>
          body {
            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
            background-color: black;
+           color: white;
          }
+
          h1 {
             text-align: center;
             color: blue;
          }
+
          .chat-box {
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -19,33 +22,54 @@
             height: 500px;
             overflow-y: scroll;
             background-color: white;
+            color: black;
          }
+
          form {
             display: flex;
             margin-top: 10px;
          }
+
          textarea {
-            border: 2px solid white;
+            flex: 1;
+            padding: 10px;
             border-radius: 8px;
+            border: 2px solid white;
             background-color: white;
+            color: black;
+            font-size: 16px;
          }
+
          button {
-            border: 1px solid  white;
+            padding: 10px;
             border-radius: 8px;
             margin-left: 10px;
             color: white;
             background-color: green;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
          }
+
+         button:hover {
+            background-color: darkgreen;
+         }
+
+         .message {
+            margin-bottom: 10px;
+         }
+
+         .message strong {
+            color: blue;
+         }
+
       </style>
    </head>
    <body>
      <h1>Chat</h1>
+
      <div class="chat-box" id="chat-box">
-        {% for mensagems in mensagen %}
-            <div class="message">
-                <strong>{{ mensagems.usuario }}</strong>: {{ mensagems.mensagem }}
-            </div>
-        {% endfor %}
+        
      </div>
 
      <form id="message-form">
@@ -53,7 +77,7 @@
         <button type="submit">Enviar</button>
      </form>
 
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+     <script src="/socket.io/socket.io.js"></script>
      <script>
         const socket = io();
 
@@ -62,47 +86,31 @@
             chatbox.scrollTop = chatbox.scrollHeight; 
         }
 
+        
         window.onload = function() {
             autoscroll();
         };
 
-        // Receber mensagens do servidor via WebSocket
         socket.on('mensagem', function(data) {
-            console.log(data);  // Debugging: veja o que está sendo recebido
             const chatbox = document.getElementById('chat-box');
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
-            // Exibir corretamente o conteúdo da mensagem e do usuário
             messageElement.innerHTML = `<strong>${data.usuario}</strong>: ${data.mensagem}`;
             chatbox.appendChild(messageElement);
             autoscroll();
         });
 
-        // Receber mensagens do bot via WebSocket (evento 'messagebot')
-        socket.on('messagebot', function(data) {
-            console.log(data);  // Debugging: veja o que está sendo recebido do bot
-            const chatbox = document.getElementById('chat-box');
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            // Exibir corretamente o nome do bot e a mensagem
-            messageElement.innerHTML = `<strong>${data.botname}</strong>: ${data.mensagem}`;
-            chatbox.appendChild(messageElement);
-            autoscroll();
-        });
-
-        // Enviar mensagem via WebSocket
         document.getElementById('message-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const messageInput = document.getElementById('message');
             const message = messageInput.value;
 
-            // Enviar a mensagem para o servidor
-            socket.emit('mensagem', message);
-
-            // Limpar a caixa de texto após enviar
-            messageInput.value = '';
+         
+            if (message.trim() !== "") {
+                socket.emit('mensagem', message); 
+                messageInput.value = ''; 
+            }
         });
-
      </script>
    </body>
 </html>
