@@ -18,7 +18,7 @@ app.use(session({
   secret: '1024551649183260xxx',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: { secure: false, maxAge: 60480000 }
   
 }))
 
@@ -36,7 +36,7 @@ function requireLogin(req, res, next) {
 }
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname,'public' ,'htmls', 'index.html'));
+  res.sendFile(path.join(__dirname,'public' ,'htmls', 'Index.html'));
 });
 
 app.get('/cadastrar', (req, res) => {
@@ -81,14 +81,18 @@ app.post('/api/v1', (req, res) => {
   const {token , botname, message} = req.body;
   if (token !== '409-655') {
     res.status(401).json({ error: 'Invalid token.'})
-  } else {
-    console.log(botname, message)
+  } else if (!token) {
+    return res.status(401).json({error: 'Token is required.'})
+  }
+  try {
     const response = {
-      mensagem: message,
       usuario: botname,
-    }
-    io.emit('mensagem', response)
-    memsagens.push(response)
+      mensagem: message
+    };
+    
+    return res.status(201).json({success: 'Operation completed successfully.'})
+  } catch(error) {
+    return res.status(401).json({error: `An error occurred while sending the request.\n${error}`})
   }
 });
 
@@ -101,7 +105,7 @@ io.on('connection', (socket) => {
   socket.emit('historico', memsagens)
   socket.on('mensagem', (msg) => {
 
-    const username = socket.request.session.user?.username;
+    const username = socket.request.session.user.username;
     const novamemsagem = { usuario: username, mensagem: msg}
     memsagens.push(novamemsagem)
     io.emit('mensagem', novamemsagem)
