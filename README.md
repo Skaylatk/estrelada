@@ -4,7 +4,7 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 
 ## Principais Funcionalidades
 
-- 🤖 **Crie seus Próprios Bots**
+- 🤖 **Crie seus Próprios Bots** - A estrelada tem a sua própria api de bot
 
 
 
