@@ -15,7 +15,7 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 
 ## Faq (Pergunta Frequentementes):
 
-- Como entro em contato com a equipe?
+### Como entro em contato com a equipe?
 **Resp.:**_Você pode enviar um email ou entrar em contato pelo Discord_
 
 
