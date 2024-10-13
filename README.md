@@ -18,6 +18,8 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 - Como entro em contato com a equipe?
 -- res
 
+---
+
 
 
 
