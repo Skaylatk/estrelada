@@ -9,7 +9,7 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 
 ## Como usar?
 
-1. **Crie sua conta:** <br>$;</br>
+1. **Crie sua conta:** <h1>$
 
 
 © 2024 Skaylatk. Todos os direitos reservados.
