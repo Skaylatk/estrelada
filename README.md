@@ -13,7 +13,7 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 2. **Faça login:** Depois que você criar a sua conta, você será redirecionado para a página de login, aí você irá bota a mesma coisa que você botou no Cadrastro
 3. **Use o chat:** depois de ter logado, você será redirecionado para o 
 
-### dj
+
 
 
 © 2024 Skaylatk. Todos os direitos reservados.
