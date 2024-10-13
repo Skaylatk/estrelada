@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path');
 const mongoose = require('mongoose')
+const helmet = require('helmet');
 const session = require('express-session')
 const SocketIo = require('socket.io')
 const http = require('http')
@@ -13,6 +14,7 @@ const io = SocketIo(server)
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+app.use(helmet())
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: '1024551649183260xxx',
@@ -112,7 +114,7 @@ io.on('connection', (socket) => {
   })
 });
 
-server.listen(3000, () => {
+server.listen(3000, "0.0.0.0", () => {
   console.log('⏰ INICIANDO SITE.')
   setTimeout(function() {
     console.log('✅ SITE INICIADO.')
