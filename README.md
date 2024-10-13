@@ -9,7 +9,8 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 
 ## Como usar?
 
-1. **Crie sua conta:** <h1>$
+1. **Crie sua conta:** Vá em [Cadrastro](https://135.148.135.159:3973/cadastrar), preencha o seus dados e pronto
+2. **Faça login**
 
 
 © 2024 Skaylatk. Todos os direitos reservados.
