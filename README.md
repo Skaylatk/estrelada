@@ -21,7 +21,9 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 #### Quando sai às atualizaçoes?
 ****
 
+<br><br><br><br><br><br>
 
+# Português
 
 ---
 
