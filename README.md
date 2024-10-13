@@ -18,10 +18,10 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 #### Como entro em contato com a equipe?
 **Resp.:**_Você pode enviar um email ou entrar em contato pelo Discord_ <br><br>
 
-### Quando sai às atualizaçoes?
+#### Quando sai às atualizaçoes?
 
 
 
-
+---
 
 © 2024 Skaylatk. Todos os direitos reservados.
