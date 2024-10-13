@@ -19,11 +19,8 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 **Resp.:**_Você pode enviar um email ou entrar em contato pelo Discord_ <br><br>
 
 #### Quando sai às atualizaçoes?
-****
+**Resp.:** _Normalmemte nos sábados_
 
-<br><br><br><br><br><br><br><br><br><br>
-
-# Português
 
 ---
 
