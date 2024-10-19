@@ -5,7 +5,7 @@ A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de v
 ## Principais Funcionalidades:
 
 - 🤖 **Crie seus Próprios Bots** - A estrelada tem a sua própria api de bot, possibilitando os usuários a fazerem os seus lindos Bot
-- 📨 **Mensagens 99% mais Rápidas** -usa um websocket feita por ele mesma que faz as suas mensagens ser envias mais rapidas
+- 📨 **Mensagens 99% mais Rápidas** -a estrelada usa um websocket feita por ele mesma que faz as suas mensagens ser envias mais rapidas
 - 🔐 **Melhor segurança** - Não se preocupe com seus dados, eles não deram exposto
 
 ## Como usar?
