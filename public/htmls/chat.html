@@ -1,116 +1,94 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-   <head>
-     <title>Estrelada</title>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <style>
-         body {
-           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-           background-color: black;
-           color: white;
-         }
-
-         h1 {
-            text-align: center;
-            color: blue;
-         }
-
-         .chat-box {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            height: 500px;
-            overflow-y: scroll;
-            background-color: white;
-            color: black;
-         }
-
-         form {
-            display: flex;
-            margin-top: 10px;
-         }
-
-         textarea {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            border: 2px solid white;
-            background-color: white;
-            color: black;
-            font-size: 16px;
-         }
-
-         button {
-            padding: 10px;
-            border-radius: 8px;
-            margin-left: 10px;
-            color: white;
-            background-color: green;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-         }
-
-         button:hover {
-            background-color: darkgreen;
-         }
-
-         .message {
-            margin-bottom: 10px;
-         }
-
-         .message strong {
-            color: blue;
-         }
-
-      </style>
-   </head>
-   <body>
-     <h1>Chat</h1>
-
-     <div class="chat-box" id="chat-box">
-        
-     </div>
-
-     <form id="message-form">
-        <textarea id="message" name="message" placeholder="Digite algo..." required></textarea>
-        <button type="submit">Enviar</button>
-     </form>
-
-     <script src="/socket.io/socket.io.js"></script>
-     <script>
-        const socket = io();
-
-        function autoscroll() {
-            const chatbox = document.getElementById('chat-box');
-            chatbox.scrollTop = chatbox.scrollHeight; 
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
         }
+        #chat {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            height: 400px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+        #messageInput {
+            width: 80%;
+            margin-right: 10px;
+        }
+        #sendBtn {
+            width: 18%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat em Tempo Real</h1>
+    <div id="chat"></div>
+    <input type="text" id="messageInput" placeholder="Digite sua mensagem">
+    <button id="sendBtn">Enviar</button>
 
-        
-        window.onload = function() {
-            autoscroll();
+    <script>
+        // Conectar ao WebSocket
+        const ws = new WebSocket('ws://51.81.29.82:3047');
+
+        // Quando a conexão é estabelecida
+        ws.onopen = () => {
+            console.log('🔗 Conectado ao WebSocket');
         };
 
-        socket.on('mensagem', function(data) {
-            const chatbox = document.getElementById('chat-box');
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            messageElement.innerHTML = `<strong>${data.usuario}</strong>: ${data.mensagem}`;
-            chatbox.appendChild(messageElement);
-            autoscroll();
-        });
+        // Quando uma mensagem é recebida do servidor
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            
+            if (data.type === 'historico') {
+                // Exibir o histórico de mensagens
+                data.data.forEach(msg => {
+                    addMessageToChat(`${msg.usuario}: ${msg.mensagem}`);
+                });
+            } else if (data.type === 'mensagem') {
+                // Exibir uma nova mensagem
+                addMessageToChat(`${data.data.usuario}: ${data.data.mensagem}`);
+            }
+        };
 
-        document.getElementById('message-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const messageInput = document.getElementById('message');
-            const message = messageInput.value;
+        // Quando a conexão é encerrada
+        ws.onclose = () => {
+            console.log('❌ Conexão com WebSocket encerrada');
+        };
 
-         
-            if (message.trim() !== "") {
-                socket.emit('mensagem', message); 
-                messageInput.value = ''; 
+        // Função para adicionar mensagens ao chat
+        function addMessageToChat(message) {
+            const chat = document.getElementById('chat');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = message;
+            chat.appendChild(newMessage);
+
+            // Scroll para o final do chat
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        // Enviar a mensagem quando clicar no botão
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            if (message) {
+                ws.send(message);  // Enviar a mensagem ao servidor via WebSocket
+                messageInput.value = '';  // Limpar o campo de entrada
             }
         });
-     </script>
-   </body>
+
+        // Enviar a mensagem quando pressionar "Enter"
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('sendBtn').click();
+            }
+        });
+    </script>
+</body>
 </html>
