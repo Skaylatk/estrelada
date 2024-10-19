@@ -1,28 +1,31 @@
 const express = require('express')
 const path = require('path');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const helmet = require('helmet');
-const session = require('express-session')
-const SocketIo = require('socket.io')
+const session = require('express-session');
+const { WebSocketServer} = require("node:ws")
+const SocketIo = require('socket.io');
 const http = require('http')
-const User = require('./models/user')
+const User = require('./models/user');
 
 
 const app = express()
 const server = http.createServer(app)
-const io = SocketIo(server)
+const wss = WebSocketServer({server})
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-app.use(helmet())
-app.use(express.urlencoded({ extended: true }));
-app.use(session({
+const sessionmi = session({
   secret: '1024551649183260xxx',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false, maxAge: 60480000 }
   
-}))
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(helmet())
+app.use(express.urlencoded({ extended: true }));
+app.use(sessionmi)
 
 mongoose.connect('mongodb+srv://alefdesalvador:filhodorei@sukita.kbmrt.mongodb.net/?retryWrites=true&w=majority&appName=Sukita')
     .then(() => console.log('✅ Conectado ao MongoDB'))
@@ -102,19 +105,16 @@ app.use((req, res) => {
   res.status(404).send('<h1>Essa página não existe</h1>');
 });
 
-io.on('connection', (socket) => {
-  console.log('👤 Novo usuario conectado:', socket.id)
-  socket.emit('historico', memsagens)
-  socket.on('mensagem', (msg) => {
+wss.on('connection', (ws, req) => {
+  const username = req.session.user.name
+  ws.send(JSON.stringify({type: "histórico", data: memsagens}))
+  ws.on('message', (message) => {
+    const novamessage = {usuario: username, mensagem: message}
+    ws.send(JSON.stringify({type: "mensagem", data: novamessage}))
+  });
+})
 
-    const username = socket.request.session.user.username;
-    const novamemsagem = { usuario: username, mensagem: msg}
-    memsagens.push(novamemsagem)
-    io.emit('mensagem', novamemsagem)
-  })
-});
-
-server.listen(3000, () => {
+server.listen(3047, () => {
   console.log('⏰ INICIANDO SITE.')
   setTimeout(function() {
     console.log('✅ SITE INICIADO.')
