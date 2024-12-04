@@ -1,4 +1,4 @@
-# Bem-vindo ao Estrelada ⭐
+# Bem-vindo ao Estrlada ⭐
 
 A **Estrelada** é uma plataforma de conversas criada para conectar pessoas de várias regiões, um lugar livre e sem regras
 
