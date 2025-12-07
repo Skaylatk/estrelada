@@ -27,7 +27,7 @@ app.use(helmet())
 app.use(express.urlencoded({ extended: true }));
 app.use(sessionmi)
 
-mongoose.connect('mongodb+srv://alefdesalvador:filhodorei@sukita.kbmrt.mongodb.net/?retryWrites=true&w=majority&appName=Sukita')
+mongoose.connect('')
     .then(() => console.log('✅ Conectado ao MongoDB'))
     .catch(err => console.error('Erro ao conectar ao MongoDB', err));
 
